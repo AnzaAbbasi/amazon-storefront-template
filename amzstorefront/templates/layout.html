@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>{% block title %}Amazon Storefront{% endblock %}</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href='http://fonts.googleapis.com/css?family=Rambla' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors/bootstrap/css/bootstrap.min.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendors/bootstrap/css/bootstrap-responsive.min.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/layout.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/store.css') }}" />
+
+  <script type="text/javascript" src="{{ url_for('static', filename='vendors/jquery-1.8.3.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='vendors/bootstrap/js/bootstrap.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/common.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/store.js') }}"></script>
+
+  {% block head %}{% endblock %}
+</head>
+<body data-spy="scroll" data-target="#topbar">
+  <header id="header">
+    <div class="container">
+      <h1><a href="{{ url_for('store.home') }}">Amazon Storefront</a></h1>
+      <div id="cart">
+        <div class="status">
+          <i class="icon icon-shopping-cart"></i> Loading cart...
+        </div>
+      </div>
+    </div>
+  </header>
+  {% include "menu.html" %}
+  <div id="main" class="container">
+    {% block main %}
+      {% include "flash_messages.html" %}
+      {% block content %}{% endblock %}
+    {% endblock %}
+  </div>
+  <footer id="footer">
+    <div class="container">
+      <p>
+        &copy; Amazon Storefront 2013.
+      </p>
+      <p>
+        Amazon and the Amazon logo are trademarks of Amazon.com, Inc. or its affiliates.<br>
+        Certain content that appears on this website comes from Amazon this content is provided 'as is' and is subject to change or removal at any time.
+      </p>
+      {% if config.get('DEBUG') or request.args.get('debug') == '1' %}
+        <p>
+          DEBUG { {% if g.cart and g.cart.created %}CartId: {{ g.cart.id }} | CartHMAC: {{ g.cart.hmac }} | CartAssocTag: {{ g.cart.assoc_tag }} |{% endif %}
+          {% if product %}ProductId: {{ product.id }} | ProductASIN: {{ product.ASIN }} |{% endif %} }
+        </p>
+      {% endif %}
+    </div>
+  </footer>
+  <div id="cart-overlay"></div>
+</body>
+</html>
